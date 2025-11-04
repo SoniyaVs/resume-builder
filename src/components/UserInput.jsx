@@ -7,34 +7,36 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { FaXmark } from "react-icons/fa6";
+import { addResumeApi } from "../services/allAPI"
 
 const steps = ['Basic Informations', 'Contact Details', 'Educational Details', 'Work Experience', 'Skills & Certifications', 'Review & Submit'];
 
-function UserInput() {
+function UserInput({ resumeDetails, setResumeDetails }) {
     const skillSuggestionArray = ['Node JS', 'HTML', 'CSS', 'Bootstrap', 'JavaScript', 'React', 'Angular', 'Express', 'Java', 'Python']
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
-    const [resumeDetails, setResumeDetails] = React.useState({
-        username: "",
-        jobTitle: "",
-        location: "",
-        email: "",
-        mobile: "",
-        gitHub: "",
-        linkedIn: "",
-        portfolio: "",
-        course: "",
-        college: "",
-        university: "",
-        passoutYear: "",
-        jobtype: "",
-        company: "",
-        clocation: "",
-        duration: "",
-        userDeatils: [],
-        summary: ""
+    // resumeDetails get from props
+    // const [resumeDetails, setResumeDetails] = React.useState({
+    //     username: "",
+    //     jobTitle: "",
+    //     location: "",
+    //     email: "",
+    //     mobile: "",
+    //     gitHub: "",
+    //     linkedIn: "",
+    //     portfolio: "",
+    //     course: "",
+    //     college: "",
+    //     university: "",
+    //     passoutYear: "",
+    //     jobtype: "",
+    //     company: "",
+    //     clocation: "",
+    //     duration: "",
+    //     userDeatils: [],
+    //     summary: ""
 
-    })
+    // })
 
     console.log(resumeDetails);
     const skillRef = React.useRef();
@@ -84,13 +86,13 @@ function UserInput() {
         if (resumeDetails.userDeatils.includes(skill)) {
             alert("The given skills are already added,Please add another")
         } else {
-            setResumeDetails({ ...resumeDetails, userDeatils: [ ...resumeDetails.userDeatils, skill ] })
+            setResumeDetails({ ...resumeDetails, userDeatils: [...resumeDetails.userDeatils, skill] })
             skillRef.current.value = ""
         }
     };
 
-    const removeSkill=(skill)=>{
-        setResumeDetails({...resumeDetails,userDeatils:resumeDetails.userDeatils.filter(item=>item!=skill)})
+    const removeSkill = (skill) => {
+        setResumeDetails({ ...resumeDetails, userDeatils: resumeDetails.userDeatils.filter(item => item != skill) })
     }
     const renderStep = (stepCount) => {
         switch (stepCount) {
@@ -157,7 +159,7 @@ function UserInput() {
                         {
                             resumeDetails.userDeatils?.length > 0 ?
                                 resumeDetails.userDeatils?.map((skill, index) => (
-                                <Button className='m-1' key={index} variant="contained">{skill} <FaXmark onClick={()=>removeSkill(skill)} className='ms-2 cursor-pointer' /></Button>
+                                    <Button className='m-1' key={index} variant="contained">{skill} <FaXmark onClick={() => removeSkill(skill)} className='ms-2 cursor-pointer' /></Button>
 
                                 ))
                                 : <p className='fw-bolder'>"No skills are added yet!!!"</p>
@@ -175,6 +177,26 @@ function UserInput() {
             )
             default: return null
         }
+    }
+
+    const handleAddResumeApi = async () => {
+        const { username, jobTitle, location } = resumeDetails
+        if (!username && !jobTitle && !location) {
+            alert("Please Fill the form")
+
+        } else {
+            console.log("Api Call...");
+           try{
+             const result=await addResumeApi()
+           }
+           catch(err){
+            console.log(err);
+            
+           }
+            //    api call
+            // success
+        }
+
     }
     return (
         <Box sx={{ width: '100%' }} >
@@ -229,9 +251,9 @@ function UserInput() {
                                 Skip
                             </Button>
                         )}
-                        <Button onClick={handleNext}>
-                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                        </Button>
+                        {activeStep === steps.length - 1 ? <Button onClick={handleAddResumeApi}>Finish</Button> : <Button onClick={handleNext}>Next</Button>}
+
+
                     </Box>
                 </React.Fragment>
             )}

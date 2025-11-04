@@ -1,0 +1,21 @@
+import React from 'react'
+import Preview from '../components/Preview'
+function ViewResume() {
+    return (
+        <>
+           
+            <div className="container my-3">
+                <div className="row">
+                    <div className="col-md-2"></div>
+                    <div className="col-md-6">
+                        <Preview />
+                    </div>
+                    <div className="col-md-2"></div>
+                </div>
+            </div>
+         
+        </>
+    )
+}
+
+export default ViewResume
