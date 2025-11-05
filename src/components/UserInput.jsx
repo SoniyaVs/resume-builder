@@ -8,10 +8,13 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { FaXmark } from "react-icons/fa6";
 import { addResumeApi } from "../services/allAPI"
+import { useNavigate } from 'react-router-dom';
 
 const steps = ['Basic Informations', 'Contact Details', 'Educational Details', 'Work Experience', 'Skills & Certifications', 'Review & Submit'];
+// for navigation
 
 function UserInput({ resumeDetails, setResumeDetails }) {
+    const navigate = useNavigate();
     const skillSuggestionArray = ['Node JS', 'HTML', 'CSS', 'Bootstrap', 'JavaScript', 'React', 'Angular', 'Express', 'Java', 'Python']
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
@@ -37,6 +40,7 @@ function UserInput({ resumeDetails, setResumeDetails }) {
     //     summary: ""
 
     // })
+
 
     console.log(resumeDetails);
     const skillRef = React.useRef();
@@ -186,13 +190,20 @@ function UserInput({ resumeDetails, setResumeDetails }) {
 
         } else {
             console.log("Api Call...");
-           try{
-             const result=await addResumeApi()
-           }
-           catch(err){
-            console.log(err);
-            
-           }
+            try {
+                const result = await addResumeApi(resumeDetails)
+                console.log(result);
+                if (result.status == 201) {
+                    alert("Resume Added Successfully")
+                    const { id } = result.data
+                    navigate(`/resume/${id}/view`)
+                }
+
+            }
+            catch (err) {
+                console.log(err);
+
+            }
             //    api call
             // success
         }
