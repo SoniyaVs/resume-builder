@@ -7,6 +7,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { useRef } from 'react';
 import { FaXmark } from "react-icons/fa6";
+import { updateResumeApi } from "../services/allAPI"
 
 const style = {
     position: 'absolute',
@@ -38,6 +39,28 @@ function Edit({ resumeDetails, setResumeDetails }) {
     const removeSkill = (skill) => {
         setResumeDetails({ ...resumeDetails, userDeatils: resumeDetails.userDeatils.filter(item => item != skill) })
     }
+
+    const handleUpdateResumeAPi = async () => {
+        const { id, username, jobTitle, location } = resumeDetails
+        if (!username && !jobTitle && !location) {
+            alert("Please Fill the form")
+        } else {
+            console.log("Api Call...");
+            try {
+                const result = await updateResumeApi(id, resumeDetails)
+                console.log(result);
+                if (result.status == 200) {
+                    alert("Resume Updated Successfully")
+                    handleClose()
+                }
+            }
+            catch (err) {
+                console.log(err);
+
+            }
+        }
+    }
+
     return (
         <div>
             <button onClick={handleOpen} className='btn text-warning fs-3'><MdEditDocument /></button>
@@ -122,7 +145,7 @@ function Edit({ resumeDetails, setResumeDetails }) {
                         </div>
                         {/* update btn */}
                         <div className='my-5'>
-                            <button className='btn btn-warning text-light'>Update</button>
+                            <button onClick={handleUpdateResumeAPi} className='btn btn-primary text-light'>Update</button>
                         </div>
                     </Box>
                 </Box>
