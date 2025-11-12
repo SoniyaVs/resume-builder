@@ -1,5 +1,5 @@
 import commonApi from "./commonApi"
-import ServerUrl from "./SERVERURL"
+import ServerUrl from "./ServerUrl"
 
 
 // add api
